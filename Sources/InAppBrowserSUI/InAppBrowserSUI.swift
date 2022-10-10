@@ -8,48 +8,54 @@
 import SwiftUI
 import SafariServices
 
-public extension View {
-    func inAppBrowserSUI(isPresented: Binding<Bool>,
-                         url: URL,
-                         color: UIColor,
-                         dismissButtonStyle: SFSafariViewController.DismissButtonStyle = .close) -> some View {
-        self.sheet(isPresented: isPresented) {
-            InAppBrowserRepresentable(url: url, tintColor: color)
-        }
+extension View {
+    /// Open the given `URL` in a in app browser when `isPresented` state is set to true.
+    /// - Parameters:
+    ///   - isPresented: Whether to open the in app browser or not.
+    ///   - url: The url to open in the in app browser.
+    ///   - color: The accent color on the browser buttons.
+    /// - Returns: The modified view
+    public func inAppBrowserSUI(isPresented: Binding<Bool>, url: URL, color: Color) -> some View {
+        modifier(InAppBrowserSUI(isPresented: isPresented, url: url, color: color))
     }
 }
 
-internal struct InAppBrowserRepresentable: UIViewControllerRepresentable {
-    internal let url: URL
-    internal let tintColor: UIColor
-    internal let dismissButtonStyle: SFSafariViewController.DismissButtonStyle
+fileprivate struct InAppBrowserSUI: ViewModifier {
+    @Binding var isPresented: Bool
 
-    internal init(url: URL,
-                  tintColor: UIColor,
-                  dismissButtonStyle: SFSafariViewController.DismissButtonStyle = .close) {
-        self.url = url
-        self.tintColor = tintColor
-        self.dismissButtonStyle = dismissButtonStyle
+    let url: URL
+    let color: Color
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(isPresented: $isPresented) {
+                InAppBrowserRepresentable(url: url, tintColor: color)
+            }
     }
+}
 
-    internal func makeUIViewController(context: Context) -> UIViewControllerType {
+fileprivate struct InAppBrowserRepresentable: UIViewControllerRepresentable {
+    let url: URL
+    let tintColor: Color
+
+    func makeUIViewController(context: Context) -> UIViewControllerType {
         let configuaration = SFSafariViewController.Configuration()
         let safariViewController = SFSafariViewController(url: url, configuration: configuaration)
-        safariViewController.dismissButtonStyle = dismissButtonStyle
+        safariViewController.dismissButtonStyle = .close
         safariViewController.preferredBarTintColor = .systemBackground
-        safariViewController.preferredControlTintColor = tintColor
+        safariViewController.preferredControlTintColor = UIColor(tintColor)
         return safariViewController
     }
 
-    internal func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
 
-    internal typealias UIViewControllerType = SFSafariViewController
+    typealias UIViewControllerType = SFSafariViewController
 }
 
 #if DEBUG
 struct InAppBrowserRepresentable_Previews: PreviewProvider {
     static var previews: some View {
-        InAppBrowserRepresentable(url: URL(string: "https://whatever.com")!, tintColor: .systemRed)
+        InAppBrowserRepresentable(url: URL(string: "https://kamaal.io")!, tintColor: .red)
     }
 }
 #endif
