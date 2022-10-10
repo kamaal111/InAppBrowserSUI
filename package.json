@@ -1,0 +1,19 @@
+{
+  "name": "inappbrowsersui",
+  "version": "2.1.0",
+  "description": "This package let's you easily open in app browsers on iOS and open the default browser on macOS.",
+  "main": "",
+  "scripts": {
+  	"build:docs": "sh Scripts/build_documentation.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamaal111/InAppBrowserSUI.git"
+  },
+  "author": "Kamaal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kamaal111/InAppBrowserSUI/issues"
+  },
+  "homepage": "https://github.com/kamaal111/InAppBrowserSUI#readme"
+}
