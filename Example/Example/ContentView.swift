@@ -6,16 +6,19 @@
 //
 
 import SwiftUI
+import InAppBrowserSUI
 
 struct ContentView: View {
+    @State private var showInAppBrowser = false
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Button(action: { showInAppBrowser = true }) {
+                Text("Open browser")
+            }
         }
         .padding()
+        .inAppBrowserSUI(isPresented: $showInAppBrowser, url: URL(string: "https://kamaal.io")!, color: .systemGreen)
     }
 }
 
