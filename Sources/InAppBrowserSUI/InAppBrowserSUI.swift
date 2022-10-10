@@ -9,13 +9,32 @@ import SwiftUI
 import SafariServices
 
 extension View {
-    /// Open the given `URL` in a in app browser when `isPresented` state is set to true.
+    /// On iOS opens the given `URL` in a in app browser when `isPresented` state is set to true and on macOS opens
+    /// your default browser with the given `URL`.
     /// - Parameters:
     ///   - isPresented: Whether to open the in app browser or not.
     ///   - url: The url to open in the in app browser.
     ///   - color: The accent color on the browser buttons.
-    /// - Returns: The modified view
-    public func inAppBrowserSUI(isPresented: Binding<Bool>, url: URL, color: Color) -> some View {
+    /// - Returns: The modified view.
+    ///
+    /// Basic usage example:
+    ///
+    /// ```swift
+    /// import SwiftUI
+    /// import InAppBrowserSUI
+    ///
+    /// struct ContentView: View {
+    ///     @State private var showInAppBrowser = false
+    ///
+    ///     var body: some View {
+    ///         Button(action: { showInAppBrowser = true }) {
+    ///             Text("Open browser")
+    ///         }
+    ///         .inAppBrowserSUI(isPresented: $showInAppBrowser, url: URL(string: "https://kamaal.io")!)
+    ///     }
+    /// }
+    /// ```
+    public func inAppBrowserSUI(isPresented: Binding<Bool>, url: URL, color: Color = .accentColor) -> some View {
         modifier(InAppBrowserSUI(isPresented: isPresented, url: url, color: color))
     }
 }
@@ -28,12 +47,22 @@ fileprivate struct InAppBrowserSUI: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            #if canImport(UIKit)
             .sheet(isPresented: $isPresented) {
                 InAppBrowserRepresentable(url: url, tintColor: color)
             }
+            #else
+            .onChange(of: isPresented, perform: { newValue in
+                if newValue {
+                    NSWorkspace.shared.open(url)
+                    isPresented = false
+                }
+            })
+            #endif
     }
 }
 
+#if canImport(UIKit)
 fileprivate struct InAppBrowserRepresentable: UIViewControllerRepresentable {
     let url: URL
     let tintColor: Color
@@ -58,4 +87,5 @@ struct InAppBrowserRepresentable_Previews: PreviewProvider {
         InAppBrowserRepresentable(url: URL(string: "https://kamaal.io")!, tintColor: .red)
     }
 }
+#endif
 #endif
