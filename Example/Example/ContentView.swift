@@ -20,6 +20,9 @@ struct ContentView: View {
         .padding()
         .inAppBrowserSUI(isPresented: $showInAppBrowser, url: URL(string: "https://kamaal.io")!, color: .red)
         .accentColor(.red)
+        #if os(macOS)
+        .frame(minWidth: 300, minHeight: 300)
+        #endif
     }
 }
 
