@@ -4,7 +4,9 @@
   "description": "This package let's you easily open in app browsers on iOS and open the default browser on macOS.",
   "main": "",
   "scripts": {
-  	"build:docs": "sh Scripts/build_documentation.sh"
+    "build:docs": "sh Scripts/build_documentation.sh",
+    "deploy:docs": "sh Scripts/deploy_documentation.sh",
+    "preview:docs": "sh Scripts/preview_documentation.sh"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/kamaal111/InAppBrowserSUI/issues"
   },
-  "homepage": "https://github.com/kamaal111/InAppBrowserSUI#readme"
+  "homepage": "https://github.com/kamaal111/InAppBrowserSUI#readme",
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
+  }
 }

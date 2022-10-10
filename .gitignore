@@ -7,3 +7,5 @@ InAppBrowserSUI.docc/.docc-build
 docs
 doc_archives
 docs_derived_data
+node_modules
+_site
