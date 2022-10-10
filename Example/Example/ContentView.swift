@@ -18,7 +18,8 @@ struct ContentView: View {
             }
         }
         .padding()
-        .inAppBrowserSUI(isPresented: $showInAppBrowser, url: URL(string: "https://kamaal.io")!, color: .systemGreen)
+        .inAppBrowserSUI(isPresented: $showInAppBrowser, url: URL(string: "https://kamaal.io")!, color: .red)
+        .accentColor(.red)
     }
 }
 
